@@ -12,10 +12,10 @@ import java.time.Instant;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity {
+public abstract class BaseEntity<ID> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    protected ID id;
 
     @CreatedDate
     private Instant createdAt;

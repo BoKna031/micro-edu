@@ -1,7 +1,7 @@
 package org.example.service.interfaces;
 
-import org.example.dto.HotelDescriptionResponse;
-import org.example.dto.RegisterHotelRequest;
+import org.example.dto.hotel.HotelDescriptionResponse;
+import org.example.dto.hotel.RegisterHotelRequest;
 
 import java.util.List;
 

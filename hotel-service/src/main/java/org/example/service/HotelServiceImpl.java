@@ -1,8 +1,8 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.HotelDescriptionResponse;
-import org.example.dto.RegisterHotelRequest;
+import org.example.dto.hotel.HotelDescriptionResponse;
+import org.example.dto.hotel.RegisterHotelRequest;
 import org.example.mapper.HotelMapper;
 import org.example.model.Hotel;
 import org.example.repository.HotelRepository;
@@ -10,6 +10,8 @@ import org.example.service.interfaces.HotelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.example.mapper.HotelMapper.mapToHotelDescriptionResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +21,12 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public HotelDescriptionResponse create(RegisterHotelRequest request) {
         Hotel hotel = hotelRepository.save(HotelMapper.maptoHotel(request));
-        return HotelMapper.mapToHotelDescriptionResponse(hotel);
+        return mapToHotelDescriptionResponse(hotel);
     }
 
     @Override
     public HotelDescriptionResponse getById(long id) {
-        return HotelMapper.mapToHotelDescriptionResponse(hotelRepository.findById(id).get());
+        return mapToHotelDescriptionResponse(hotelRepository.findById(id).get());
     }
 
     @Override

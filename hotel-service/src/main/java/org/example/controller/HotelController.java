@@ -2,8 +2,8 @@ package org.example.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.HotelDescriptionResponse;
-import org.example.dto.RegisterHotelRequest;
+import org.example.dto.hotel.HotelDescriptionResponse;
+import org.example.dto.hotel.RegisterHotelRequest;
 import org.example.service.interfaces.HotelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,4 +45,6 @@ public class HotelController {
                 "Hotel successfully deleted!",
                 HttpStatus.OK);
     }
+
+
 }
