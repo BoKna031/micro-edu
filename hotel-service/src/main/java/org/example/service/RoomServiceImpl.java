@@ -8,6 +8,7 @@ import org.example.model.Hotel;
 import org.example.model.Room;
 import org.example.repository.HotelRepository;
 import org.example.repository.RoomRepository;
+import org.example.service.interfaces.HotelService;
 import org.example.service.interfaces.RoomService;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
+    private final HotelService hotelService;
 
 
     @Override
     public RoomResponse create(RoomRequest request) {
         Room room = RoomMapper.maptoRoom(request);
-        Hotel hotel = hotelRepository.findById(request.getHotelId()).get();
+        Hotel hotel = hotelService.getHotelById(request.getHotelId());
 
         room.setHotel(hotel);
         Room savedRoom = roomRepository.save(room);
