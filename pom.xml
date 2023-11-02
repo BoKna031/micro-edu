@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.1.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.example</groupId>
+	<artifactId>micro-edu</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>micro-edu</name>
+
+	<description>Parent for other microservices</description>
+	<modules>
+		<module>auth-service</module>
+		<module>hotel-service</module>
+		<module>guests-service</module>
+		<module>location-service</module>
+		<module>reservation-service</module>
+        <module>comment-service</module>
+		<module>message-service</module>
+	</modules>
+
+
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+
+</project>
