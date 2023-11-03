@@ -6,14 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.model.enums.RoomType;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomRequest {
-    @JsonProperty("hotel-id")
-    private long hotelId;
     private int number;
     private int capacity;
     @JsonProperty("type")
     private RoomType roomType;
+    @JsonProperty("room-features")
+    private Set<Long> roomFeaturesIds;
 }

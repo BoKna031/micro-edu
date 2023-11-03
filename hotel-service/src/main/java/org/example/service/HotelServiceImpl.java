@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.hotel.HotelDescriptionResponse;
 import org.example.dto.hotel.RegisterHotelRequest;
@@ -17,6 +18,7 @@ import static org.example.mapper.HotelMapper.mapToHotelDescriptionResponse;
 
 @Service
 @RequiredArgsConstructor
+
 public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
 

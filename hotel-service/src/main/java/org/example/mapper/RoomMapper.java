@@ -1,16 +1,17 @@
 package org.example.mapper;
 
 import org.example.dto.room.RoomRequest;
+import org.example.dto.room.RoomRequestWithHotelId;
 import org.example.dto.room.RoomResponse;
 import org.example.model.Room;
 
 public class RoomMapper {
-    public static Room maptoRoom(RoomRequest request){
+    public static Room maptoRoom(RoomRequestWithHotelId request){
         return new Room(
-                request.getNumber(),
-                request.getCapacity(),
+                request.getRoomRequest().getNumber(),
+                request.getRoomRequest().getCapacity(),
                 true,
-                request.getRoomType(),
+                request.getRoomRequest().getRoomType(),
                 null,
                 null);
     }
