@@ -26,11 +26,6 @@ public class Room extends BaseEntity<Long>{
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    @ManyToMany
-    @JoinTable(
-            name = "room_include_features",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_feature_id")
-    )
-    private Set<RoomFeature> features;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IncludedRoomFeature> features;
 }
