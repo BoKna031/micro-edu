@@ -21,4 +21,11 @@ public class RoomController {
                 roomService.create(new RoomRequestWithHotelId(request, hotelId)),
                 HttpStatus.CREATED);
     }
+    @GetMapping("/{room-id}")
+    public ResponseEntity<RoomResponse> getById(@PathVariable("hotel-id") long hotelId, @PathVariable("room-id") long roomId, @RequestParam(value = "features-included", required = false, defaultValue = "false") boolean featuresIncluded){
+        if(featuresIncluded)
+            return new ResponseEntity<>(roomService.getRoomResponseWithFeaturesById(roomId), HttpStatus.OK);
+        return new ResponseEntity<>(roomService.getRoomResponseById(roomId), HttpStatus.OK);
+
+    }
 }

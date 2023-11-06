@@ -1,9 +1,11 @@
 package org.example.mapper;
 
-import org.example.dto.room.RoomRequest;
 import org.example.dto.room.RoomRequestWithHotelId;
 import org.example.dto.room.RoomResponse;
+import org.example.dto.room.RoomResponseWithFeatures;
 import org.example.model.Room;
+
+import java.util.stream.Collectors;
 
 public class RoomMapper {
     public static Room maptoRoom(RoomRequestWithHotelId request){
@@ -24,6 +26,13 @@ public class RoomMapper {
                 room.getCapacity(),
                 room.getRoomType(),
                 room.isAvailable()
+        );
+    }
+
+    public static RoomResponseWithFeatures mapToRoomResponseWithFeatures(Room room){
+        return new RoomResponseWithFeatures(
+                mapToRoomResponse(room),
+                room.getFeatures().stream().map(RoomFeatureMapper::toRoomFeatureWithQuantityResponse).collect(Collectors.toList())
         );
     }
 }
