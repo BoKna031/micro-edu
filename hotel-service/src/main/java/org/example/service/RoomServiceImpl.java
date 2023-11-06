@@ -1,20 +1,21 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.room.RoomRequest;
 import org.example.dto.room.RoomRequestWithHotelId;
 import org.example.dto.room.RoomResponse;
 import org.example.dto.roomfeature.FeatureWithQuantity;
 import org.example.exception.EntityNotFoundException;
 import org.example.mapper.RoomMapper;
-import org.example.model.*;
+import org.example.model.Hotel;
+import org.example.model.IncludedRoomFeature;
+import org.example.model.Room;
+import org.example.model.RoomFeature;
 import org.example.repository.RoomFeatureRepository;
 import org.example.repository.RoomRepository;
 import org.example.service.interfaces.HotelService;
 import org.example.service.interfaces.RoomService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

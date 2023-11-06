@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.model.enums.RoomType;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
