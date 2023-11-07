@@ -1,6 +1,5 @@
 package unit;
 
-import dummy.HotelCreator;
 import org.example.dto.hotel.HotelDescriptionResponse;
 import org.example.dto.hotel.RegisterHotelRequest;
 import org.example.exception.EntityNotFoundException;
@@ -8,13 +7,9 @@ import org.example.model.Hotel;
 import org.example.repository.HotelRepository;
 import org.example.service.HotelServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -29,67 +24,75 @@ public class HotelServiceTest {
     @Mock
     private HotelRepository hotelRepositoryMock;
 
-    @BeforeEach
-    public void SetUp(){
-        Hotel dummyHotel = HotelCreator.createdHotel();
-        BDDMockito.when(hotelRepositoryMock.save(
-                        Mockito.argThat(hotel -> {
-                           return hotel.getId() == null;
-                        })
-                ))
-                .thenReturn(dummyHotel);
-
-        BDDMockito.when(hotelRepositoryMock.findById(dummyHotel.getId()))
-                .thenReturn(Optional.of(dummyHotel));
-        BDDMockito.when(hotelRepositoryMock.findById(-1L))
-                .thenReturn(Optional.empty());
-
-        BDDMockito.when(hotelRepositoryMock.findAll())
-                .thenReturn(List.of(dummyHotel));
-    }
-
     @Test
     public void createSuccessfully(){
-        Hotel hotel = HotelCreator.createdHotel();
-        RegisterHotelRequest request = new RegisterHotelRequest(hotel.getName(), hotel.getAddress(), hotel.getNumberOfStars());
-        HotelDescriptionResponse hotelDescriptionResponse =  hotelService.create(request);
+        Hotel expectedHotel = new Hotel("Sheraton", "Bulevar Evrope 3", 4, null);
+        RegisterHotelRequest request = new RegisterHotelRequest(expectedHotel.getName(), expectedHotel.getAddress(), expectedHotel.getNumberOfStars());
+        expectedHotel.setId(1L);
 
-        Assertions.assertNotNull(hotelDescriptionResponse);
-        Assertions.assertNotNull(hotelDescriptionResponse.getId());
-        Assertions.assertEquals(request.getAddress(), hotelDescriptionResponse.getAddress());
-        Assertions.assertEquals(request.getName(), hotelDescriptionResponse.getName());
-        Assertions.assertEquals(request.getCategory(), hotelDescriptionResponse.getCategory());
+        BDDMockito.when(hotelRepositoryMock.save(ArgumentMatchers.any(Hotel.class)))
+                .thenReturn(expectedHotel);
+
+        HotelDescriptionResponse actualResponse =  hotelService.create(request);
+
+        Assertions.assertNotNull(actualResponse);
+        Assertions.assertNotNull(actualResponse.getId());
+        Assertions.assertEquals(expectedHotel.getAddress(), actualResponse.getAddress());
+        Assertions.assertEquals(expectedHotel.getName(), actualResponse.getName());
+        Assertions.assertEquals(expectedHotel.getNumberOfStars(), actualResponse.getCategory());
     }
 
     @Test
     public void getByIdSuccessfully(){
-        Hotel hotel = HotelCreator.createdHotel();
-        HotelDescriptionResponse hotelDescriptionResponse =  hotelService.getById(hotel.getId());
+        Hotel expectedHotel = createHotel(1L, "Sheraton", "Bulevar Evrope 3", 4);
 
-        Assertions.assertNotNull(hotelDescriptionResponse);
-        Assertions.assertNotNull(hotelDescriptionResponse.getId());
-        Assertions.assertEquals(hotel.getId(), hotelDescriptionResponse.getId());
-        Assertions.assertEquals(hotel.getAddress(), hotelDescriptionResponse.getAddress());
-        Assertions.assertEquals(hotel.getName(), hotelDescriptionResponse.getName());
-        Assertions.assertEquals(hotel.getNumberOfStars(), hotelDescriptionResponse.getCategory());
+        BDDMockito.when(hotelRepositoryMock.findById(expectedHotel.getId()))
+                .thenReturn(Optional.of(expectedHotel));
+
+        HotelDescriptionResponse actualResponse =  hotelService.getById(expectedHotel.getId());
+
+        Assertions.assertNotNull(actualResponse);
+        Assertions.assertNotNull(actualResponse.getId());
+        Assertions.assertEquals(expectedHotel.getId(), actualResponse.getId());
+        Assertions.assertEquals(expectedHotel.getAddress(), actualResponse.getAddress());
+        Assertions.assertEquals(expectedHotel.getName(), actualResponse.getName());
+        Assertions.assertEquals(expectedHotel.getNumberOfStars(), actualResponse.getCategory());
     }
 
     @Test
     public void getByNotExistingId(){
+        BDDMockito.when(hotelRepositoryMock.findById(-1L))
+                .thenReturn(Optional.empty());
+
         Assertions.assertThrows(EntityNotFoundException.class, () -> hotelService.getById(-1L));
     }
 
     @Test
     public void getAll(){
-        Hotel hotel = HotelCreator.createdHotel();
-        List<HotelDescriptionResponse> hotels = hotelService.getAll();
+        Hotel expectedHotel = createHotel(1L, "Name1", "Addr1", 3);
 
-        Assertions.assertNotNull(hotels);
-        Assertions.assertFalse(hotels.isEmpty());
-        Assertions.assertNotNull(hotels.get(0).getId());
-        Assertions.assertEquals(hotel.getId(), hotels.get(0).getId());
-        Assertions.assertEquals(hotel.getAddress(), hotels.get(0).getAddress());
-        Assertions.assertEquals(hotel.getName(), hotels.get(0).getName());
-        Assertions.assertEquals(hotel.getNumberOfStars(), hotels.get(0).getCategory());
+        BDDMockito.when(hotelRepositoryMock.findAll())
+                .thenReturn(List.of(
+                        expectedHotel,
+                        createHotel(2L, "Name2", "Addr2", 5)
+                        ));
+
+        List<HotelDescriptionResponse> actualHotelList = hotelService.getAll();
+        HotelDescriptionResponse actualFirstHotel = actualHotelList.get(0);
+
+
+        Assertions.assertNotNull(actualHotelList);
+        Assertions.assertNotNull(actualFirstHotel.getId());
+        Assertions.assertEquals(expectedHotel.getId(), actualFirstHotel.getId());
+        Assertions.assertEquals(expectedHotel.getAddress(), actualFirstHotel.getAddress());
+        Assertions.assertEquals(expectedHotel.getName(), actualFirstHotel.getName());
+        Assertions.assertEquals(expectedHotel.getNumberOfStars(), actualFirstHotel.getCategory());
+    }
+
+    private Hotel createHotel(Long id, String name, String address, int category){
+        Hotel hotel = new Hotel(name, address, category, null);
+        if(id != null)
+            hotel.setId(id);
+        return hotel;
     }
 }
