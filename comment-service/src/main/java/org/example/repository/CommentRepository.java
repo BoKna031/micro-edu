@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.Comment;
+import org.example.model.Comment;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

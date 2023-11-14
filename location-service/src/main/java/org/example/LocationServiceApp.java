@@ -2,12 +2,14 @@ package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class ProfileMain {
+@EnableDiscoveryClient
+public class LocationServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(ProfileMain.class, args);
+        SpringApplication.run(LocationServiceApp.class, args);
     }
 }

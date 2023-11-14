@@ -10,9 +10,7 @@ import java.time.LocalDateTime;
 public class CommentResponse {
     private String id;
     private String text;
-    private String roomId;
-    private String hotelId;
-    private String guestId;
-    private String guestEmail;
+    private HotelRoomResponse hotel;
+    private GuestDto guest;
     private LocalDateTime timestamp;
 }

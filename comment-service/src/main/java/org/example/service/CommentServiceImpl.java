@@ -1,11 +1,18 @@
-package org.example;
+package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.mapper.Mapper;
 import org.example.dto.CommentRequest;
 import org.example.dto.CommentResponse;
 import org.example.exception.BadRequestException;
 import org.example.exception.EntityNotFoundException;
+import org.example.microservices.guest.service.GuestService;
+import org.example.microservices.hotel.service.HotelService;
+import org.example.model.Comment;
+import org.example.model.Guest;
+import org.example.model.HotelRoom;
 import org.example.repository.CommentRepository;
+import org.example.service.interfaces.CommentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +23,15 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    private final HotelService hotelService;
+    private final GuestService guestService;
 
     @Override
     public CommentResponse create(CommentRequest request) {
-        Comment savedComment = commentRepository.insert(Mapper.toComment(request));
+        HotelRoom hotelRoom = hotelService.getRoomInfoFromHotelIdAndRoomId(request.getHotel());
+        Guest guest = guestService.getGuestById(request.getGuestId());
+        Comment comment = new Comment(request.getText(), hotelRoom, guest);
+        Comment savedComment = commentRepository.insert(comment);
         return Mapper.toCommentResponse(savedComment);
     }
 

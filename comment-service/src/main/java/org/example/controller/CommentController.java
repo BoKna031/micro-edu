@@ -1,9 +1,10 @@
-package org.example;
+package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.CommentRequest;
 import org.example.dto.CommentResponse;
 import org.example.dto.UpdateGuestEmailRequest;
+import org.example.service.interfaces.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

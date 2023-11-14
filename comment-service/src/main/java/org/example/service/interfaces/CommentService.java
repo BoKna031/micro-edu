@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service.interfaces;
 
 import org.example.dto.CommentRequest;
 import org.example.dto.CommentResponse;

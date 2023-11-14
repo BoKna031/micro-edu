@@ -7,8 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentRequest {
     private String text;
-    private String roomId;
-    private String hotelId;
+    private HotelRoomDto hotel;
     private String guestId;
-    private String guestEmail;
 }
