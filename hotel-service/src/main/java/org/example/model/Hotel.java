@@ -13,8 +13,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class Hotel extends BaseEntity<Long>{
+    @Column(nullable = false)
     private String name;
     private String address;
+    @Column(nullable = false)
     private UUID locationId;
     private int numberOfStars;
 

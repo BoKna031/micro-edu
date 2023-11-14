@@ -14,16 +14,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LocationServiceImpl implements LocationService {
     private final String PROTOCOL = "http";
-    private final String HOST = "localhost";
-    private final String PORT = "8081";
-    private final String SERVICE = "rest/locations";
-    private final String BASE_URL = PROTOCOL + "://" + HOST + ":" + PORT +  "/" + SERVICE;
+    private final String SERVICE_NAME = "location-service";
+    private final String LOCATION_ENDPOINT = "/rest/locations";
+    private final String BASE_URL = PROTOCOL + "://" + SERVICE_NAME;
     private final RestTemplate restTemplate;
 
     @Override
     public LocationResponse getAddressFromLocationUUID(UUID locationId) throws RestClientException {
         ResponseEntity<LocationResponse> response = restTemplate.getForEntity(
-                BASE_URL + "/" + locationId.toString(),
+                BASE_URL + LOCATION_ENDPOINT + "/" + locationId.toString(),
                 LocationResponse.class
         );
         return response.getBody();
