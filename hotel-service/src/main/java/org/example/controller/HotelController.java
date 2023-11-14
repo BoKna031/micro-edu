@@ -1,6 +1,7 @@
 package org.example.controller;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.hotel.HotelDescriptionResponse;
 import org.example.dto.hotel.RegisterHotelRequest;
@@ -18,6 +19,7 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<HotelDescriptionResponse> registerNew(@RequestBody RegisterHotelRequest request){
         return new ResponseEntity<>(
                 hotelService.create(request),

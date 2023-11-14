@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.time.Instant;
 
@@ -23,4 +25,22 @@ public class RestExceptionHandler {
                 , HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(RestClientException.class)
+    public ResponseEntity<String> handleRestClientExceptionError(RestClientException e){
+        return new ResponseEntity<>(
+                e.getMessage(),
+                HttpStatus.FAILED_DEPENDENCY
+        );
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<String> handleRestClientExceptionError(HttpClientErrorException e){
+        return new ResponseEntity<>(
+                e.getResponseBodyAsString(),
+                e.getStatusCode()
+        );
+    }
+
+
 }
