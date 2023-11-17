@@ -21,9 +21,7 @@
 		<module>hotel-service</module>
 		<module>guests-service</module>
 		<module>location-service</module>
-		<module>reservation-service</module>
         <module>comment-service</module>
-		<module>message-service</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
     </modules>

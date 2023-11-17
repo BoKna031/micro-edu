@@ -27,7 +27,6 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public HotelDescriptionResponse create(RegisterHotelRequest request) {
-
         String address = getAddressFromLocationId(request.getLocationId());
         Hotel hotel = HotelMapper.maptoHotel(request);
         hotel.setAddress(address);
@@ -80,8 +79,7 @@ public class HotelServiceImpl implements HotelService {
         try{
             return getAddressFromLocationId(locationId);
         }catch(RestClientException e){
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }
