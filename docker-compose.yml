@@ -1,6 +1,75 @@
 version: '3.1'
 
 services:
+
+  discovery-server:
+    build:
+      context: ./discovery-server
+    ports:
+      - "${DISCOVERY_SERVER_PORT}:8761"
+    expose:
+      - "${DISCOVERY_SERVER_PORT}"
+    env_file:
+      - .env
+
+  api-gateway:
+    restart: unless-stopped
+    build:
+      context: ./api-gateway
+    ports:
+      - "${API_GATEWAY_PORT}:8080"
+    env_file:
+      - .env
+
+  location-service:
+    restart: unless-stopped
+    build:
+      context: ./location-service
+    ports:
+      - "${LOCATION_SERVICE_PORT}:8080"
+    env_file:
+      - .env
+    depends_on:
+      - discovery-server
+      - mysql
+
+  guest-service:
+    restart: unless-stopped
+    build:
+      context: ./guests-service
+    ports:
+      - "${GUEST_SERVICE_PORT}:8080"
+    env_file:
+      - .env
+    depends_on:
+      - discovery-server
+      - mysql
+
+  comment-service:
+    restart: unless-stopped
+    build:
+      context: ./comment-service
+    ports:
+      - "${COMMENT_SERVICE_PORT}:8080"
+    env_file:
+      - .env
+    depends_on:
+      - discovery-server
+      - mongo
+
+  hotel-service:
+    restart: unless-stopped
+    build:
+      context: ./hotel-service
+    ports:
+      - "${HOTEL_SERVICE_PORT}:8080"
+    env_file:
+      - .env
+    depends_on:
+      - discovery-server
+      - comment-service
+      - guest-service
+
       # --------------------- DATABASE  --------------------------------------
   mysql:
     image: mysql:8.0.35-debian
