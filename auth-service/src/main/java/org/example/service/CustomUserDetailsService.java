@@ -1,8 +1,7 @@
 package org.example.service;
 
-import lombok.RequiredArgsConstructor;
-import org.example.mapper.UserDetailsMapper;
-import org.example.model.UserCredential;
+import org.example.mapper.Mapper;
+import org.example.model.User;
 import org.example.repository.UserCredentialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserCredentialRepository credentialRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserCredential> credential =  credentialRepository.findByName(username);
-        return credential.map(UserDetailsMapper::toCustomUserDetails).orElseThrow(() -> new RuntimeException("Not valid credentials!"));
+        Optional<User> credential =  credentialRepository.findByName(username);
+        return credential.map(Mapper::toCustomUserDetails).orElseThrow(() -> new RuntimeException("Not valid credentials!"));
     }
 }
