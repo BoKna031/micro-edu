@@ -1,6 +1,5 @@
 package org.example.config;
 
-import lombok.Getter;
 import org.example.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +9,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Getter
 public class CustomUserDetails implements UserDetails {
 
     private final String username;

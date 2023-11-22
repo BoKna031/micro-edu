@@ -6,15 +6,10 @@ import org.example.dto.RegisterUserRequest;
 import org.example.model.Role;
 import org.example.model.User;
 import org.example.repository.UserCredentialRepository;
+import org.example.security.jwt.JwtService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +35,8 @@ public class AuthService {
         return jwtService.generateToken(authentication);
     }
 
-    public void validateToken(String token){
-        jwtService.validateToken(token);
+    public boolean validateToken(String token){
+        return jwtService.validateToken(token);
     }
 
     private User setupNewUser(RegisterUserRequest request){

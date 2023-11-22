@@ -1,14 +1,15 @@
-package org.example.service;
+package org.example.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.example.config.CustomUserDetails;
 import org.example.model.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -17,11 +18,7 @@ import java.util.*;
 @Component
 public class JwtService {
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-
-    public void validateToken(final String token){
-        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
-    }
-
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     public String generateToken(Authentication authentication){
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         Map<String, Object> roleClaims = createRoleClaimsFromAuthorities(user.getAuthorities());
@@ -53,6 +50,33 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder().setSigningKey(getSignKey()).build()
+                .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean validateTokenForUser(String authToken, UserDetails userDetails) {
+        final String username = extractUsername(authToken);
+        return username.equals(userDetails.getUsername()) && validateToken(authToken);
+    }
+
+    public boolean validateToken(String authToken){
+        try {
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parse(authToken);
+            return true;
+        } catch (MalformedJwtException e) {
+            logger.error("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            logger.error("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            logger.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.error("JWT claims string is empty: {}", e.getMessage());
+        }
+
+        return false;
+    }
+
     public static boolean hasAnyRole(String token, Role... roles){
         List<String> userRoles = getRolesFromJwtToken(token);
         if(userRoles == null)
@@ -72,5 +96,4 @@ public class JwtService {
                 .getBody();
         return null;
     }
-
 }

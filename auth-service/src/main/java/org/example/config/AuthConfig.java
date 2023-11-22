@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
+@EnableWebSecurity
 public class AuthConfig {
 
     @Bean
@@ -44,7 +44,7 @@ public class AuthConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("auth/**").permitAll()
+                        auth.requestMatchers("auth/register", "auth/token", "auth/validate").permitAll()
                                 .anyRequest().authenticated()
                 );
 
