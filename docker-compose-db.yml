@@ -28,47 +28,6 @@ services:
     depends_on:
       - discovery-server
       - mysql
-
-  guest-service:
-    restart: unless-stopped
-    build:
-      context: ./guests-service
-    env_file:
-      - .env
-    depends_on:
-      - discovery-server
-      - mysql
-
-  comment-service:
-    restart: unless-stopped
-    build:
-      context: ./comment-service
-    env_file:
-      - .env
-    depends_on:
-      - discovery-server
-      - mongo
-
-  hotel-service:
-    restart: unless-stopped
-    build:
-      context: ./hotel-service
-    env_file:
-      - .env
-    depends_on:
-      - discovery-server
-      - comment-service
-      - guest-service
-
-  auth-service:
-    restart: unless-stopped
-    build:
-      context: ./auth-service
-    env_file:
-      - .env
-    depends_on:
-      - mongo
-      - discovery-server
     # --------------------- DATABASE  --------------------------------------
   mysql:
     image: mysql:8.0.35-debian
@@ -76,14 +35,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: booking-db
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - "${MONGO_DB_PORT}:27017"
+      - "3306:3306"
 
   #----------------- DATABASE_GUI ------------------------
 
@@ -92,17 +45,6 @@ services:
     restart: always
     ports:
       - "${SQL_GUI_PORT}:8080"
-
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "${MONGO_GUI_PORT}:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
 
   #--------------------KAFKA--------------------------
 
